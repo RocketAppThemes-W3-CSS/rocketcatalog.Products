@@ -1,0 +1,45 @@
+﻿
+<div>
+    -----------> ROW TEST
+</div>
+
+<div class="w3-row">
+    <div class="w3-col m3 l2">
+        <p>ArtcleRef:&nbsp;{{genxml.data.genxml.textbox.articleref}}</p><br />
+
+
+        <div class="product">
+
+            <div class="productimg">
+                IMAGE: {{genxml.data.genxml.imagelist.genxml.hidden.imagepatharticleimage}}
+
+                {{#each genxml.data.genxml.imagelist}}
+                <div>== {{hidden.imagepatharticleimage}}</div>
+                <img class="w3-padding-small" src="{{thumbnailimageurl @root.genxml.sessionparams.r.engineurl hidden.imagepatharticleimage 480 480  }}" style="width:100%">
+                {{/each}}
+
+                <!-- Rollover -->
+                <div class="productrollover">
+                    <div class="productrollover-content">
+                        <div class="productrollover-actions">
+                            <a href="@articleListUrl">@ResourceKey("theme.details", sessionParams.CultureCode)</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="productcontent">
+                <h3><a href="@articleListUrl">@articleData.Name</a></h3>
+                <div class="w3-row">
+                    <div class="w3-padding">
+                        <div class="productprice">@articleData.Info.GetXmlPropertyDecimal("genxml/textbox/price").ToString("C2", CultureInfo.CurrentCulture)</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+{{! displayData this}}
+
