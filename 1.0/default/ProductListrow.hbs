@@ -11,11 +11,9 @@
         <div class="product">
 
             <div class="productimg">
-                IMAGE: {{genxml.data.genxml.imagelist.genxml.hidden.imagepatharticleimage}}
 
-                {{#each genxml.data.genxml.imagelist}}
-                <div>== {{hidden.imagepatharticleimage}}</div>
-                <img class="w3-padding-small" src="{{thumbnailimageurl @root.genxml.sessionparams.r.engineurl hidden.imagepatharticleimage 480 480  }}" style="width:100%">
+                {{#each genxml.data.genxml.imagelist.genxml}}
+                    <img class="w3-padding-small" src="{{thumbnailimageurl @root.genxml.sessionparams.r.engineurl hidden.imagepatharticleimage 480 480  }}" style="width:100%">
                 {{/each}}
 
                 <!-- Rollover -->
@@ -41,5 +39,5 @@
     </div>
 </div>
 
-{{! displayData this}}
+{{ displayData this}}
 
