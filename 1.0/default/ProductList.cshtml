@@ -9,8 +9,7 @@
 @AddProcessData("resourcepath", "/DesktopModules/DNNrocket/api/App_LocalResources/")
 @AddProcessData("resourcepath", "/DesktopModules/DNNrocketModules/RocketCatalog/App_LocalResources/")
 
-@{ 
-    var sessionParams = (SessionParams)Model.SessionParamsData;
+@{ var sessionParams = (SessionParams)Model.SessionParamsData;
     var articleDataList = (ArticleLimpetList)Model.GetDataObject("articlelist");
     var portalCatalog = (PortalCatalogLimpet)Model.GetDataObject("portalcatalog");
     var remoteModule = (RemoteModule)Model.GetDataObject("remotemodule");
@@ -22,107 +21,48 @@
 
     var hbsDict = new Dictionary<string, SimplisityInfo>();
     hbsDict.Add("sessionparams", sessionParams.Info);
-    hbsDict.Add("resxlist", RenderRazorUtils.GetResxPaths(Processdata)); 
- }
+    hbsDict.Add("resxlist", RenderRazorUtils.GetResxPaths(Processdata));
+
+    var lp = 1;
+
+}
 
 @AddProcessData("resourcepath", appTheme.AppThemeVersionFolderRel + "/resx/")
+
+@if (portalCatalog.DebugMode)
+{<div class="w3-small">@DateTime.Now.ToString()</div>}
 
 <h1>
     @if (sessionParams.GetInt("catid") == 0)
     {
-        <span>@articleDataList.Dashboard.Title&nbsp;</span> 
-    }
+        <span>@articleDataList.Dashboard.Title&nbsp;</span> }
     else
     {
-        <span>@categoryData.Name&nbsp;</span>
-    }
+        <span>@categoryData.Name&nbsp;</span>}
 </h1>
 
 
-@foreach (ArticleLimpet articleData in articleDataList.GetArticleList())
-{
-    if (!articleData.IsHidden)
+<div class="w3-row-padding w3-padding-16 w3-center">
+    @foreach (ArticleLimpet articleData in articleDataList.GetArticleList())
     {
-        hbsDict.Remove("data");
-        hbsDict.Add("data", articleData.Info);
-        @RenderHandleBars(hbsDict, appTheme, "productlistrow.hbs", remoteModule.ModuleRef)}
+        var modLp = (lp % 5);
+        if (modLp == 0)
+        {
+            @Raw("</div>")
+            @Raw("<div class=\"w3-row-padding w3-padding-16 w3-center\">")
+            hbsDict.Remove("data");
+            hbsDict.Add("data", articleData.Info);
+            var cacheKey = "list" + articleData.ArticleId.ToString();
+            @RenderHandleBars(hbsDict, appTheme, "productlistrow.hbs", remoteModule.ModuleRef, cacheKey)
+        }
+        else
+        {
+            hbsDict.Remove("data");
+            hbsDict.Add("data", articleData.Info);
+            var cacheKey = "list" + articleData.ArticleId.ToString();
+            @RenderHandleBars(hbsDict, appTheme, "productlistrow.hbs", remoteModule.ModuleRef, cacheKey)
+        }
+
+        lp += 1;
     }
-
-<hr />
-
-<div class="productlistflex">
-
-    <div class="productlist">
-
-        <h1>
-            @if (sessionParams.GetInt("catid") == 0)
-            {
-<span>@articleDataList.Dashboard.Title&nbsp;</span> }
-else
-{
-<span>@categoryData.Name&nbsp;</span>}
-        </h1>
-
-        @RenderTemplate("SearchBanner.cshtml", appTheme, Model, true)
-
-        <div id="datasection">
-
-            <div class="productgrid">
-
-                @foreach (ArticleLimpet articleData in articleDataList.GetArticleList())
-                {
-                    if (!articleData.IsHidden)
-                    {
-
-                        var imgRelPath = "/DesktopModules/DNNrocket/api/images/noimage2.png";
-                        var articleImage = articleData.GetImage(0);
-                        if (articleImage != null)
-                        {
-                            imgRelPath = articleImage.RelPath;
-                        }
-                        var articleListUrl = articleData.ArticleDetailUrl(sessionParams);
-
-    <div class="product">
-
-        <div class="productimg">
-            <img src="@ThumbnailImageWebsiteDomainUrl(portalData.EngineUrlWithProtocol, imgRelPath, 480, 480)" alt="@articleData.Name" />
-            <!-- Rollover -->
-            <div class="productrollover">
-                <div class="productrollover-content">
-                    <div class="productrollover-actions">
-                        <a href="@articleListUrl">@ResourceKey("theme.details", sessionParams.CultureCode)</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="productcontent">
-            <h3><a href="@articleListUrl">@articleData.Name</a></h3>
-            <div class="w3-row">
-                <div class="w3-padding">
-                    <div class="productprice">@articleData.Info.GetXmlPropertyDecimal("genxml/textbox/price").ToString("C2", CultureInfo.CurrentCulture)</div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-    }
-}
-
-            </div>
-
-            @RenderTemplate("ProductPaging.cshtml", appThemeDefault, Model, true)
-
-        </div>
-
-    </div>
-
-    <div class="productlistside">
-
-        <!-- Categories -->
-        <div class="productlistcat">
-            @RenderTemplate("CategorySideMenu.cshtml", appTheme, Model, true)
-        </div>
-
-    </div>
-
 </div>
