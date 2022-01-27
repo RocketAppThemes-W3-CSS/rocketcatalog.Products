@@ -1,14 +1,10 @@
 ﻿
-<div class="w3-quarter">
+<div class="w3-col s12 m6 l3 w3-padding w3-center">
     <a href="{{genxml.sessionparams.r.pageurl}}?articleid={{genxml.data.genxml.column.itemid}}">
-        {{#each genxml.data.genxml.imagelist.genxml}}
-        {{#if @first}}
-        <img class="sliderind{{@root.genxml.sessionparams.r.moduleref}}" src="{{thumbnailimageurl @root.genxml.sessionparams.r.engineurl hidden.imagepatharticleimage 270 400  }}" style="width:100%">
-        {{/if}}
-        {{/each}}
+        <img class="" src="{{article this "imageurl" 0 360 360}}" style="width:100%">
     </a>
-    <h3>{{genxml.data.genxml.lang.genxml.textbox.articlename}}</h3>
-    <p>{{genxml.data.genxml.lang.genxml.textbox.articlesummary}}</p>
+    <h3>{{article this "name"}}</h3>
+    <p>{{article this "summary"}}</p>
 </div>
 
 

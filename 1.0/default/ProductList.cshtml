@@ -22,9 +22,6 @@
     var hbsDict = new Dictionary<string, SimplisityInfo>();
     hbsDict.Add("sessionparams", sessionParams.Info);
     hbsDict.Add("resxlist", RenderRazorUtils.GetResxPaths(Processdata));
-
-    var lp = 1;
-
 }
 
 @AddProcessData("resourcepath", appTheme.AppThemeVersionFolderRel + "/resx/")
@@ -41,28 +38,18 @@
         <span>@categoryData.Name&nbsp;</span>}
 </h1>
 
+<div class="w3-row">
+    @RenderTemplate("SearchBanner.cshtml", appThemeDefault, Model, true)
+</div>
 
-<div class="w3-row-padding w3-padding-16 w3-center">
+<div class="w3-row w3-padding-16 w3-center">
     @foreach (ArticleLimpet articleData in articleDataList.GetArticleList())
     {
-        var modLp = (lp % 5);
-        if (modLp == 0)
-        {
-            @Raw("</div>")
-            @Raw("<div class=\"w3-row-padding w3-padding-16 w3-center\">")
-            hbsDict.Remove("data");
-            hbsDict.Add("data", articleData.Info);
-            var cacheKey = "list" + articleData.ArticleId.ToString();
-            @RenderHandleBars(hbsDict, appTheme, "productlistrow.hbs", remoteModule.ModuleRef, cacheKey)
-        }
-        else
-        {
-            hbsDict.Remove("data");
-            hbsDict.Add("data", articleData.Info);
-            var cacheKey = "list" + articleData.ArticleId.ToString();
-            @RenderHandleBars(hbsDict, appTheme, "productlistrow.hbs", remoteModule.ModuleRef, cacheKey)
-        }
-
-        lp += 1;
+        hbsDict.Remove("data");
+        hbsDict.Add("data", articleData.Info);
+        @RenderHandleBarsRC(hbsDict, appTheme, "productlistrow.hbs", remoteModule.ModuleRef, "")
     }
+</div>
+<div class="w3-row w3-padding-16 w3-center">
+    @RenderTemplate("ProductPaging.cshtml", appThemeDefault, Model, true)
 </div>
